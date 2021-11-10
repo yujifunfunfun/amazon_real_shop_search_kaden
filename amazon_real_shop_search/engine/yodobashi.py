@@ -21,7 +21,6 @@ logger = set_logger(__name__)
 
 def start_chrome():
     global option
-
     user_agent = [
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36',
@@ -34,53 +33,50 @@ def start_chrome():
     option.add_argument('--user-agent=' + UA)
     option.add_argument('--ignore-certificate-errors')
     option.add_argument('--ignore-ssl-errors')
-    option.add_argument("window-size=900,600")
+    option.add_argument("window-size=1000,600")
     #ここで、バージョンなどのチェックをする
     global driver
     driver = webdriver.Chrome(ChromeDriverManager().install(),options=option)   
 
-def fetch_kojima_data(driver,model_number_list):
+def fetch_yodobashi_data(driver,model_number_list):
     wait = WebDriverWait(driver, 20)
-    driver.get('https://www.kojima.net/ec/index.html')
+    driver.get('https://www.yodobashi.com/')
     element = wait.until(EC.presence_of_all_elements_located)
-    kojima_item_data = []
+    yodobashi_item_data = []
     for model_number in model_number_list:
         print(model_number)
         # 商品ページへ遷移
         if model_number != 'None':
             try:
-                driver.find_element_by_id('MK2PFRDH010_01_keyword').clear()
-                driver.find_element_by_id('MK2PFRDH010_01_keyword').send_keys(model_number)
-                driver.find_element_by_class_name('submit').click()
+                driver.find_element_by_id('getJsonData').clear()
+                driver.find_element_by_id('getJsonData').send_keys(model_number)
+                driver.find_element_by_id('js_keywordSearchBtn').click()
                 element = wait.until(EC.presence_of_all_elements_located)
-                name =driver.find_element_by_xpath('//*[@id="fwCms_wrapper"]/div/div/div[2]/div[2]/div[1]/div/ul/li[1]/p[1]/a/span').text
-                price = driver.find_element_by_class_name('number').text
+                name = driver.find_element_by_class_name('fs14').text
+                
+                price = driver.find_element_by_class_name('productPrice').text
                 price = re.sub(r'\D', '', price) 
-                url = driver.find_element_by_class_name('mk2TagClick').get_attribute('href')
-
+                url = driver.find_element_by_class_name('js_productListPostTag').get_attribute('href')
+                p = r'product/(.*)/'
+                item_number = re.search(p, url).group(1)
+                stock_url = f'https://www.yodobashi.com/ec/product/stock/{item_number}/'
             except Exception as e:
                 logger.info(e)
                 name = 'None'
                 price = 999999
                 url = 'None'
+                stock_url = 'None'
         else:
             name = 'None'
             price = 999999
             url = 'None'
-        kojima_item_data.append([name,price,url,''])
+            stock_url = 'None'
+        yodobashi_item_data.append([name,price,url,stock_url])
         
 
-    return kojima_item_data
+    return yodobashi_item_data
+
 
 if __name__ == "__main__":
     start_chrome()
-    fetch_kojima_data()
-
-
-
-
-
-
-
-
-        
+    fetch_yodobashi_data()
