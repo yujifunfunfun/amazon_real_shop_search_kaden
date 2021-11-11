@@ -12,17 +12,16 @@ def load_model_number():
 
     return model_number_list
 
-def load_buybox_asin():
-    df = pd.read_csv('Product_Finder.2021_11_7.products.csv',usecols=['ASIN','Buy Box 🚚: 現在価格'])
+def load_buybox_asin_name():
+    df = pd.read_csv('Product_Finder.2021_11_7.products.csv',usecols=['ASIN','Buy Box 🚚: 現在価格','商品名'])
     df = df.fillna('None')
     df = df.values.tolist()
-    buybox_asin_list = []
-    for buybox_asin in df:
-        buybox = buybox_asin[0]
+    buybox_asin_name_list = []
+    for buybox_asin_name in df:
+        buybox = buybox_asin_name[1]
         buybox = re.sub(r'\D', '', buybox) 
-        buybox_asin_list.append([buybox,buybox_asin[1]])
-        
-    return buybox_asin_list
+        buybox_asin_name_list.append([buybox,buybox_asin_name[2],buybox_asin_name[0]])
+    return buybox_asin_name_list
 
 
 def join_csv():
@@ -34,6 +33,12 @@ def join_csv():
     data_list.append(ks_laox_matsuya_profit_df)
     data_list.append(nojima_yamada_yodobashi_profit_df)
     
-    df = pd.concat(data_list, axis=0, sort=True)
+    df = pd.concat(data_list, axis=1, sort=True)
 
     df.to_csv("~/Desktop/profit.csv",encoding="utf_8-sig",index=False)
+
+if __name__ == "__main__":
+    join_csv()
+
+
+

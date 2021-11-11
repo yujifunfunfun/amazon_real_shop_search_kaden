@@ -26,6 +26,6 @@ credentials=dict(
         role_arn=SP_API_ROLE_ARN,
     )
 
-fees_data = ProductFees(Marketplaces.JP,credentials=credentials).get_product_fees_estimate_for_asin(asin='B08KJN93LQ',price=1800,currency='JPY',is_fba=True)
+fees_data = ProductFees(Marketplaces.JP,credentials=credentials).get_product_fees_estimate_for_asin(asin='B086XVZQJ6',price=1800,currency='JPY',is_fba=True)
 
 print(fees_data)

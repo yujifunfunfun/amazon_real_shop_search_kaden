@@ -7,7 +7,7 @@ logger = set_logger(__name__)
 from sp_api.api import ProductFees
 from sp_api.base.marketplaces import Marketplaces
 from common.config import *
-from common.csv import *
+from common.operation_csv import *
 from time import sleep
 
 
@@ -29,13 +29,14 @@ def cal_fba_fee(price,asin):
         fba_fee = 999999
     return fba_fee
 
-def fetch_amaozn_price_url():
-    buybox_asin_list = load_buybox_asin()
-    amazon_price_url_list = []
-    for buybox_asin in buybox_asin_list:
+def fetch_amazon_price_url():
+    buybox_asin_name_list = load_buybox_asin_name()
+    print(buybox_asin_name_list)
+    amazon_price_url_name_list = []
+    for buybox_asin_name in buybox_asin_name_list:
         try:
-            buybox = buybox_asin[0]
-            asin = buybox_asin[1]            
+            buybox = buybox_asin_name[0]
+            asin = buybox_asin_name[1]            
             url = f'https://www.amazon.co.jp/gp/product/{asin}'
             fba_fee = cal_fba_fee(buybox,asin)
             sleep(1)
@@ -44,9 +45,9 @@ def fetch_amaozn_price_url():
             amazon_price = 0
             url = 'NOne'
         
-        amazon_price_url_list.append([amazon_price,url])
+        amazon_price_url_name_list.append([amazon_price,url,buybox_asin_name[2]])
         
-    return amazon_price_url_list
+    return amazon_price_url_name_list
 
 
 if __name__ == "__main__":

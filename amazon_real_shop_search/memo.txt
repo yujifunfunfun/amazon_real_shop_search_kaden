@@ -20,3 +20,6 @@ K's　モデル  https://www.ksdenki.com/shop/goods/search.aspx?search=x&keyword
 
 
 https://www.edion.com/detail.html?_rt=8ViuLsibTqRrxJUXf66gbngY9Y0mKRafyrLqM6Mo7c&p_cd=00068250263&_keyword=FW3221E9S
+
+[['a',100,'b'],['a',200,'b'],['a',300,'b'],['a',400,'b'],['a',500,'b'],['a',600,'b'],['a',700,'b']]
+[[500,'c','d'],[600,'c','d'],[700,'c','d'],[800,'c','d'],[900,'c','d'],[1000,'c','d'],[1100,'c','d']]
