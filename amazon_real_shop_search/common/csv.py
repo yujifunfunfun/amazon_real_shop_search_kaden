@@ -23,3 +23,17 @@ def load_buybox_asin():
         buybox_asin_list.append([buybox,buybox_asin[1]])
         
     return buybox_asin_list
+
+
+def join_csv():
+    biccamera_edion_kojima_profit_df = pd.read_csv("~/Desktop/biccamera_edion_kojima_profit.csv")
+    ks_laox_matsuya_profit_df = pd.read_csv("~/Desktop/ks_laox_matsuya_profit.csv")
+    nojima_yamada_yodobashi_profit_df = pd.read_csv("~/Desktop/nojima_yamada_yodobashi_profit.csv")
+    data_list = []
+    data_list.append(biccamera_edion_kojima_profit_df)
+    data_list.append(ks_laox_matsuya_profit_df)
+    data_list.append(nojima_yamada_yodobashi_profit_df)
+    
+    df = pd.concat(data_list, axis=0, sort=True)
+
+    df.to_csv("~/Desktop/profit.csv",encoding="utf_8-sig",index=False)
