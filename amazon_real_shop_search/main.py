@@ -17,6 +17,23 @@ from multiprocessing import freeze_support
 
 
 def fetch_biccamera_edion_kojima_data(driver,model_number_list,amazon_price_url_name_list):
+    user_agent = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36',
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69"
+]
+    UA = user_agent[random.randrange(0, len(user_agent), 1)]
+    option0 = Options()                         
+    # option.add_argument('--headless') 
+    option0.add_argument('--user-data-dir=' + os.path.join(os.getcwd(),"profile0")) 
+    option0.add_argument('--lang=ja-JP')
+    option0.add_argument('--user-agent=' + UA)
+    option0.add_argument('--ignore-certificate-errors')
+    option0.add_argument('--ignore-ssl-errors')
+    option0.add_argument("window-size=900,800")
+    #ここで、バージョンなどのチェックをする
+    driver = webdriver.Chrome(ChromeDriverManager().install(),options=option0) 
+    
     biccamera_item_data = fetch_biccamera_data(driver,model_number_list)
     edion_item_data = fetch_edion_data(driver,model_number_list)
     kojima_item_data = fetch_kojima_data(driver,model_number_list)
@@ -45,16 +62,23 @@ def fetch_nojima_yamada_yodobashi_data(driver,model_number_list,amazon_price_url
 def main():
     model_number_list = load_model_number()
     amazon_price_url_name_list = fetch_amazon_price_url()
-    driver = start_chrome()
-
-    p0 = multiprocessing.Process(target=fetch_biccamera_edion_kojima_data,args=(driver,model_number_list,amazon_price_url_name_list))
-    p1 = multiprocessing.Process(target=fetch_ks_laox_matsuya_data,args=(driver,model_number_list,amazon_price_url_name_list))
-    p2 = multiprocessing.Process(target=fetch_nojima_yamada_yodobashi_data,args=(driver,model_number_list,amazon_price_url_name_list))
+    driver0 = start_chrome0()
+    driver1 = start_chrome1()
+    driver2 = start_chrome2()
     
+
+    p0 = multiprocessing.Process(target=fetch_biccamera_edion_kojima_data,args=(driver0,model_number_list,amazon_price_url_name_list))
+    p1 = multiprocessing.Process(target=fetch_ks_laox_matsuya_data,args=(driver1,model_number_list,amazon_price_url_name_list))
+    p2 = multiprocessing.Process(target=fetch_nojima_yamada_yodobashi_data,args=(driver2,model_number_list,amazon_price_url_name_list))
+
     # プロセス開始
     p0.start()
+    sleep(2)
     p1.start()
+    sleep(2)
     p2.start()
+    
+    sleep(100)
     
     # プロセス終了待ち合わせ
     p0.join()
@@ -69,12 +93,7 @@ def main():
     
     
     
-# if __name__ == "__main__":
-#     freeze_support()
-#     main()
-
 if __name__ == "__main__":
-    model_number_list = load_model_number()
-    amazon_price_url_name_list = fetch_amazon_price_url()
-    driver = start_chrome()
-    fetch_biccamera_edion_kojima_data(driver,model_number_list,amazon_price_url_name_list)
+    freeze_support()
+    main()
+

@@ -31,7 +31,6 @@ def cal_fba_fee(price,asin):
 
 def fetch_amazon_price_url():
     buybox_asin_name_list = load_buybox_asin_name()
-    print(buybox_asin_name_list)
     amazon_price_url_name_list = []
     for buybox_asin_name in buybox_asin_name_list:
         try:
@@ -51,4 +50,4 @@ def fetch_amazon_price_url():
 
 
 if __name__ == "__main__":
-    fetch_amaozn_price_url()
+    fetch_amazon_price_url()

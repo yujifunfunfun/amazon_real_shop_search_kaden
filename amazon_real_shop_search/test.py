@@ -3,6 +3,7 @@ import re
 from sp_api.api import ProductFees
 from sp_api.base.marketplaces import Marketplaces
 from common.config import *
+from sp_api.api import CatalogItems
 
 
 
@@ -26,6 +27,10 @@ credentials=dict(
         role_arn=SP_API_ROLE_ARN,
     )
 
-fees_data = ProductFees(Marketplaces.JP,credentials=credentials).get_product_fees_estimate_for_asin(asin='B086XVZQJ6',price=1800,currency='JPY',is_fba=True)
+# fees_data = ProductFees(Marketplaces.JP,credentials=credentials).get_product_fees_estimate_for_asin(asin='B086XVZQJ6',price=1800,currency='JPY',is_fba=True)
 
-print(fees_data)
+item_list = CatalogItems(Marketplaces.JP,credentials=credentials).search_catalog_items(keywords='4573102620736',pageSize=20)
+
+
+
+print(item_list)
