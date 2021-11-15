@@ -3,17 +3,16 @@ import re
 
 
 def load_model_number():
-    df = pd.read_csv('Product_Finder.2021_11_7.products.csv',usecols=['Model'])
+    df = pd.read_csv('~/Desktop/amazon.csv',usecols=['Product Codes: PartNumber'])
     df = df.fillna('None')
     df = df.values.tolist()
     model_number_list = []
     for model_number in df:
         model_number_list.append(model_number[0])
-
     return model_number_list
 
 def load_buybox_asin_name():
-    df = pd.read_csv('Product_Finder.2021_11_7.products.csv',usecols=['ASIN','Buy Box 🚚: 現在価格','商品名'])
+    df = pd.read_csv('~/Desktop/amazon.csv',usecols=['ASIN','新品: 現在価格'])
     df = df.fillna('None')
     df = df.values.tolist()
     buybox_asin_name_list = []

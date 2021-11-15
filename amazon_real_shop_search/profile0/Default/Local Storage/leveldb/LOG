@@ -1,3 +1,5 @@
-2021/11/12-05:50:32.792 3207 Reusing MANIFEST /Users/tozuka/Documents/物販/amazon_real_shop_search/profile0/Default/Local Storage/leveldb/MANIFEST-000001
-2021/11/12-05:50:32.793 3207 Recovering log #3
-2021/11/12-05:50:32.793 3207 Reusing old log /Users/tozuka/Documents/物販/amazon_real_shop_search/profile0/Default/Local Storage/leveldb/000003.log 
+2021/11/15-21:36:05.971 2f03 Reusing MANIFEST /Users/tozuka/Documents/物販/amazon_real_shop_search/profile0/Default/Local Storage/leveldb/MANIFEST-000001
+2021/11/15-21:36:05.973 2f03 Recovering log #4
+2021/11/15-21:36:05.974 2f03 Level-0 table #7: started
+2021/11/15-21:36:05.977 2f03 Level-0 table #7: 12352 bytes OK
+2021/11/15-21:36:06.016 2f03 Delete type=0 #4
