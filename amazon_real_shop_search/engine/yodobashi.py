@@ -13,7 +13,7 @@ import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from common.chromedriver import *
-
+import time
 logger = set_logger(__name__)
 
 
@@ -39,6 +39,7 @@ def start_chrome():
 
 def fetch_yodobashi_data(driver,model_number_list):
     wait = WebDriverWait(driver, 20)
+    time_list = [0.5,1.5,2.5]
     driver.get('https://www.yodobashi.com/')
     element = wait.until(EC.presence_of_all_elements_located)
     yodobashi_item_data = []
@@ -51,26 +52,30 @@ def fetch_yodobashi_data(driver,model_number_list):
                 driver.find_element_by_id('getJsonData').send_keys(model_number)
                 driver.find_element_by_id('js_keywordSearchBtn').click()
                 element = wait.until(EC.presence_of_all_elements_located)
-                name = driver.find_element_by_class_name('fs14').text
+                sleep_time = time_list[random.randrange(0, len(time_list), 1)]
+                time.sleep(sleep_time)
                 
-                price = driver.find_element_by_class_name('productPrice').text
+                if driver.find_element_by_class_name('js_dispDiscontinuedCheckbox').is_selected():
+                    driver.find_element_by_class_name('js_dispDiscontinuedCheckbox').click()
+                    element = wait.until(EC.presence_of_all_elements_located)                  
+                
+                name = driver.find_element_by_class_name('fs14').text
+                price = driver.find_element_by_class_name('pInfo').text
+                p = r'￥(.*)'
+                price = re.search(p, price).group(1)                
                 price = re.sub(r'\D', '', price) 
                 url = driver.find_element_by_class_name('js_productListPostTag').get_attribute('href')
-                p = r'product/(.*)/'
-                item_number = re.search(p, url).group(1)
-                stock_url = f'https://www.yodobashi.com/ec/product/stock/{item_number}/'
+
             except Exception as e:
                 logger.info(e)
                 name = 'None'
                 price = 999999
                 url = 'None'
-                stock_url = 'None'
         else:
             name = 'None'
             price = 999999
             url = 'None'
-            stock_url = 'None'
-        yodobashi_item_data.append([name,price,url,stock_url])
+        yodobashi_item_data.append([name,price,url])
         
 
     return yodobashi_item_data

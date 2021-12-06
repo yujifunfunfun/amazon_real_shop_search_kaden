@@ -41,8 +41,9 @@ def fetch_amazon_price_url():
             sleep(1)
             amazon_price = int(buybox) - int(fba_fee)
         except Exception as e:
+            logger.info(e)
             amazon_price = 0
-            url = 'NOne'
+            url = 'None'
         
         amazon_price_url_name_list.append([amazon_price,url,buybox_asin_name[2]])
         

@@ -55,7 +55,7 @@ def fetch_nojima_data(driver,model_number_list):
                 name = driver.find_element_by_class_name('textOverflowShohinmei').text
                 price = driver.find_element_by_class_name('price').text
                 price = re.sub(r'\D', '', price) 
-                url = driver.find_element_by_xpath('//*[@id="list"]/div/div[4]/ul/li/div/div[2]/div[1]/a').get_attribute('href')
+                url = driver.find_element_by_css_selector('div.cmdty_iteminfo > a').get_attribute('href')
       
             except Exception as e:
                 logger.info(e)
@@ -66,7 +66,7 @@ def fetch_nojima_data(driver,model_number_list):
             name = 'None'
             price = 999999
             url = 'None'
-        nojima_item_data.append([name,price,url,''])
+        nojima_item_data.append([name,price,url])
         
 
     return nojima_item_data

@@ -13,7 +13,8 @@ import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from common.chromedriver import *
-
+import time
+from common.operation_csv import *
 logger = set_logger(__name__)
 
 
@@ -52,10 +53,12 @@ def fetch_ks_data(driver,model_number_list):
                 driver.find_element_by_id('keyword').send_keys(model_number)
                 driver.find_element_by_class_name('search_box_buttom_').click()
                 element = wait.until(EC.presence_of_all_elements_located)
+                time.sleep(1)
                 name = driver.find_element_by_class_name('name_').text
                 price = driver.find_element_by_class_name('carousel_list_price_').text
                 price = re.sub(r'\D', '', price) 
-                url = driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div[4]/ul/li/div[3]/div[1]/a').get_attribute('href')
+                url = driver.find_element_by_css_selector('div.name_ > a').get_attribute('href')
+
             except Exception as e:
                 logger.info(e)
                 name = 'None'
@@ -65,12 +68,11 @@ def fetch_ks_data(driver,model_number_list):
             name = 'None'
             price = 999999
             url = 'None'
-        ks_item_data.append([name,price,url,''])
-        
-
+        ks_item_data.append([name,price,url])
     return ks_item_data
 
 
 if __name__ == "__main__":
+    model_number_list = load_model_number()
     start_chrome()
-    fetch_ks_data()
+    fetch_ks_data(driver,model_number_list)

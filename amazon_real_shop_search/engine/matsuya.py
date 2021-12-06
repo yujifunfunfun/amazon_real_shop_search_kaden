@@ -13,7 +13,8 @@ import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from common.chromedriver import *
-
+import time
+from common.operation_csv import *
 logger = set_logger(__name__)
 
 
@@ -52,10 +53,11 @@ def fetch_matsuya_data(driver,model_number_list):
                 driver.find_element_by_id('ucSearchArea1_tbKeyWordPc').send_keys(model_number)
                 driver.find_element_by_id('ucSearchArea1_btnSrcPc').click()
                 element = wait.until(EC.presence_of_all_elements_located)
-                name = driver.find_element_by_xpath('//*[@id="itemList_ul"]/li/p[1]/a').text
+                time.sleep(1)
+                name = driver.find_element_by_css_selector('p.productname > a').text
                 price = driver.find_element_by_class_name('price').text
                 price = re.sub(r'\D', '', price) 
-                url = driver.find_element_by_xpath('//*[@id="itemList_ul"]/li/p[1]/a').get_attribute('href')
+                url = driver.find_element_by_css_selector('p.productname > a').get_attribute('href')
             except Exception as e:
                 logger.info(e)
                 name = 'None'
@@ -65,12 +67,14 @@ def fetch_matsuya_data(driver,model_number_list):
             name = 'None'
             price = 999999
             url = 'None'
-        matsuya_item_data.append([name,price,url,''])
+        matsuya_item_data.append([name,price,url])
         
-
+    print(matsuya_item_data)
     return matsuya_item_data
 
 
 if __name__ == "__main__":
+    model_number_list = load_model_number()
+    
     start_chrome()
-    fetch_matsuya_data()
+    fetch_matsuya_data(driver,model_number_list)

@@ -52,25 +52,27 @@ def fetch_biccamera_data(driver,model_number_list):
                 driver.find_element_by_id('q').send_keys(model_number)
                 driver.find_element_by_id('btnSearch').click()
                 element = wait.until(EC.presence_of_all_elements_located)
+                try:
+                    if driver.find_element_by_id('bcs_sold_out_tp2_cond').is_selected():
+                        driver.find_element_by_id('bcs_sold_out_tp2_url').click()
+                        element = wait.until(EC.presence_of_all_elements_located)  
+                except Exception as e:
+                    logger.info(e)          
                 name = driver.find_element_by_class_name('bcs_item').text
                 price = driver.find_element_by_class_name('val').text
                 price = re.sub(r'\D', '', price) 
                 url = driver.find_element_by_class_name('bcs_item').get_attribute('href')
-                p = r'item/(.*)/'
-                item_number = re.search(p, url).group(1)
-                stock_url = f'https://www.biccamera.com/bc/tenpo/CSfBcToriokiList.jsp?GOODS_NO={item_number}'
+        
             except Exception as e:
-                logger.info(e)
+                logger.info(e)     
                 name = 'None'
                 price = 999999
                 url = 'None'
-                stock_url = 'None'
         else:
             name = 'None'
             price = 999999
             url = 'None'
-            stock_url = 'None'
-        biccamera_item_data.append([name,price,url,stock_url])
+        biccamera_item_data.append([name,price,url])
         
 
     return biccamera_item_data
